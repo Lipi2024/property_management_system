@@ -1,0 +1,159 @@
+{% extends "rent/base/base.html" %}
+{% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h6 class="m-0 font-weight-bold text-primary">All Houses Type</h6>
+                </div>
+                <div class="col-lg-4 text-right">
+                    <button type="button" class="btn btn-primary rounded-0" data-toggle="modal"
+                            data-target="#exampleModal">
+                        <i class="fa fa-plus" aria-hidden="true"></i> Add A House
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>Sl No</th>
+                        <th>House Type</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>Sl No</th>
+                        <th>House Type</th>
+                        <th>Action</th>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+
+                    {% if not house_type %}
+                    <tr>
+                        <td colspan="3" class="text-center">No Data Available! </td>
+                    </tr>
+                    {% else %}
+                    {% for type in house_type %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{type.type}}</td>
+                        <td>
+                            <button class="btn btn-sm btn-warning rounded-0" data-toggle="modal" data-target="#infoModal{{type.id}}">Info</button>
+                            <button class="btn btn-sm btn-success rounded-0" data-toggle="modal" data-target="#editModal{{type.id}}">Edit</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+<!--add houses bootstrap modal -->
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add House Type</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="houseType">House Type</label>
+                        <input type="text" name="house_type" class="form-control rounded-0" id="houseType"
+                               placeholder="Ex: 2BHK, 3BHK">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary rounded-0">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--closed add house modal -->
+
+<!--info modals gose here -->
+{% for type in house_type %}
+<div class="modal fade" id="infoModal{{type.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">About</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+               <b>House Id: {{type.id}}</b><br><br><br>
+               <b>House Type: {{type.type}}</b><br><br><br>
+               <b>House Created On: {{type.add_on}}</b><br><br><br>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+
+<!--HOUSE TYPE EDIT MODULE -->
+<!-- Modal -->
+{% for type in house_type %}
+<div class="modal fade" id="editModal{{type.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit House Type</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/house-type/edit/{{type.id}}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="editHouseType">House Type</label>
+                        <input type="text" name="edit_house_type_name" class="form-control rounded-0" id="editHouseType"
+                               value="{{type.type}}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary rounded-0">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+<!--closed add house modal -->
+<!--CLOSE HOUSE TYPE EDIT MODULE -->
+<!--closed info modals -->
+{% endblock %}

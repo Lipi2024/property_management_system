@@ -1,0 +1,232 @@
+{% extends "rent/base/base.html" %}
+{% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h6 class="m-0 font-weight-bold text-primary">Allocate House</h6>
+                </div>
+                <div class="col-lg-4 text-right">
+                    <button type="button" class="btn btn-primary rounded-0" data-toggle="modal"
+                            data-target="#exampleModal">
+                        <i class="fa fa-plus" aria-hidden="true"></i> Add House Type
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>Sl No</th>
+                        <th>Tenants Name</th>
+                        <th>Allocated House</th>
+                        <th>Allocated Date</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>Sl No</th>
+                        <th>Tenants Name</th>
+                        <th>Allocated House</th>
+                        <th>Allocated Date</th>
+                        <th>Action</th>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+
+                    {% if not allocated_list %}
+                    <tr>
+                        <td colspan="5" class="text-center">No Data Available!</td>
+                    </tr>
+                    {% else %}
+                    {% for i in allocated_list %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{i.name.name}}</td>
+                        <td>{{i.rented_house.name}} ({{i.rented_house.number}})</td>
+                        <td>{{i.created_on}}</td>
+                        <td>
+                            <button class="btn btn-sm btn-warning rounded-0" data-toggle="modal"
+                                    data-target="#infoModal{{i.id}}">remove
+                            </button>
+                            <button class="btn btn-sm btn-success rounded-0" data-toggle="modal"
+                                    data-target="#editModal{{i.id}}">Edit
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+<!--add houses bootstrap modal -->
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Allocation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>Select Tenants Name:</label>
+                        <select class="form-control rounded-0" name="tenants_name">
+                            {% for tenants in tenants_lists %}
+                                <option value="{{tenants.id}}">
+                                    {{tenants.name}}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Member</label>
+                        <input type="text" name="member_input" class="form-control rounded-0" placeholder="4,5,10 ..">
+                    </div>
+                    <div class="form-group">
+                        <label>Select House:</label>
+                        <select class="form-control rounded-0" name="rented_house">
+                            {% for houses in houses_lists %}
+                                <option value="{{houses.id}}">
+                                    {{houses.number}} {{houses.name}} ({{houses.type.type}})
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary rounded-0">Allocate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--closed add house modal -->
+
+<!--HOUSE INFO MODULE-->
+{% for i in allocated_list %}
+<div class="modal fade" id="infoModal{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Data Can't be recover again !
+                <table class="table">
+                    <tbody>
+                      <tr>
+                        <td>Name</td>
+                        <td>{{i.name.name}}</td>
+                      </tr>
+                      <tr>
+                        <td>Allocated House</td>
+                        <td>{{i.rented_house.name}} ({{i.rented_house.number}})</td>
+                      </tr>
+                      <tr>
+                        <td>Allocated Date</td>
+                        <td>{{i.created_on}}</td>
+                      </tr>
+                    </tbody>
+                </table>
+            </div>
+             <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <a href="/houses_allocation/delete/{{i.id}}" class="btn btn-danger rounded-0">Yes Delete</a>
+              </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+<!--HOUSE TYPE EDIT MODULE -->
+<!-- Modal -->
+{% for i in allocated_list %}
+<div class="modal fade" id="editModal{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit House Type</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/houses/edit/{{i.id}}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="editHouseType">House Number</label>
+                        <input type="text" name="house_number" class="form-control rounded-0" id="editHouseType"
+                               value="{{i.number}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="editHouseName">Name(Optional)</label>
+                        <input type="text" name="house_name" class="form-control rounded-0" id="editHouseName"
+                               value="{{i.name}}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editsHouseType">Select House Type:</label>
+                        <select class="form-control rounded-0" id="editsHouseType" name="house_type">
+                            {% for type in house_type %}
+
+                                <option value="{{type.id}}" {% if i.type.id == type.id %}selected{% endif %}>
+                                    {{type.type}}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editRentalAmount">Rental Amount(Monthly)</label>
+                        <input type="text" name="monthly_amount" class="form-control rounded-0" id="editRentalAmount"
+                               value="{{i.rent}}">
+                    </div>
+                    <div class="form-group">
+                      <label for="comments">Address:</label>
+                      <textarea class="form-control" name="address" rows="4" id="comments">{{i.address}}</textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary rounded-0">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+<!--closed add house modal -->
+<!--CLOSE HOUSE TYPE EDIT MODULE -->
+<!--closed info modals -->
+{% endblock %}

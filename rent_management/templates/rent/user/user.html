@@ -1,0 +1,253 @@
+{% extends "rent/base/base.html" %}
+{% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h6 class="m-0 font-weight-bold text-primary">All User</h6>
+                </div>
+                <div class="col-lg-4 text-right">
+                    <button type="button" class="btn btn-primary rounded-0" data-toggle="modal"
+                            data-target="#exampleModal">
+                        <i class="fa fa-plus" aria-hidden="true"></i> Add User
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>Sl No</th>
+                        <th>Name</th>
+                        <th>Contact</th>
+                        <th>User Type</th>
+                        <th>Action</th>
+
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>Sl No</th>
+                        <th>Name</th>
+                        <th>Contact</th>
+                        <th>User Type</th>
+                        <th>Action</th>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+
+                    {% if not users %}
+                    <tr>
+                        <td colspan="5" class="text-center">No Data Available! </td>
+                    </tr>
+                    {% else %}
+                    {% for i in users %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{i.name}}</td>
+                        <td>{{i.mobile_number}}<br>
+                            <span style="font-size= 5px;">
+                                {{i.email_id}}
+                            </span>
+                        </td>
+                        <td>{{i.user_type.type}}</td>
+                        <td>
+                            <button class="btn btn-sm btn-warning rounded-0" data-toggle="modal" data-target="#infoModal{{i.id}}">Info</button>
+                            <button class="btn btn-sm btn-success rounded-0" data-toggle="modal" data-target="#editModal{{i.id}}">Edit</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+<!-- ADD USER MODAL -->
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="userName">Name</label>
+                        <input type="text" name="user_name_input" class="form-control rounded-0" id="userName"
+                               placeholder="Full Name...">
+                    </div>
+                    <div class="form-group">
+                        <label for="userAge">Age</label>
+                        <input type="text" name="usr_age_input" class="form-control rounded-0" id="userAge"
+                               placeholder="Ex: 14, 25, 36 ...">
+                    </div>
+                    <div class="form-group">
+                        <label for="userSex">Name</label>
+                        <select id="userSex" name="usr_sex_input" class="form-control">
+                            {% for value, label in select_gender %}
+                                <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="userAadhaar">Aadhaar Number</label>
+                        <input type="text" name="usr_aadhaar_input" class="form-control rounded-0" id="userAadhaar"
+                               placeholder="12 Digit Aadhaar Number">
+                    </div>
+                    <div class="form-group">
+                        <label for="userMobile">Mobile Number</label>
+                        <input type="text" name="usr_mobile_input" class="form-control rounded-0" id="userMobile"
+                               placeholder="10 Digit Mobile Number">
+                    </div>
+                    <div class="form-group">
+                        <label for="userAlternative_number">Alternative Number</label>
+                        <input type="text" name="usr_alternative_input" class="form-control rounded-0" id="userAlternative_number"
+                               placeholder="10 Digit Mobile Number">
+                    </div>
+                    <div class="form-group">
+                        <label for="userEmail">Email Id</label>
+                        <input type="text" name="usr_email_input" class="form-control rounded-0" id="userEmail"
+                               placeholder="user@email.com">
+                    </div>
+                    <div class="form-group">
+                      <label for="userAddress">Address</label>
+                      <textarea class="form-control rounded-0" name="usr_address_input" rows="5" id="userAddress"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="userType">User Type</label>
+                        <select id="userType" name="usr_type_input" class="form-control rounded-0">
+                            {% for usertype in user_type_context %}
+                                <option value="{{ usertype.id }}">{{ usertype.type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary rounded-0">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--closed add house modal -->
+
+<!--info modals gose here -->
+{% for i in users %}
+<div class="modal fade" id="infoModal{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">About</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+               <table class="table">
+
+                  <tbody>
+                    <tr>
+                      <td>Name</td>
+                      <td>{{i.name}}</td>
+                    </tr>
+                   <tr>
+                      <td>Age</td>
+                      <td>{{i.age}}</td>
+                    </tr>
+                    <tr>
+                      <td>Sex</td>
+                      <td>{{i.sex}}</td>
+                    </tr>
+                    <tr>
+                      <td>Aadhaar No</td>
+                      <td>{{i.aadhaar_number}}</td>
+                    </tr>
+                    <tr>
+                      <td>Alternative Number</td>
+                      <td>{{i.mobile_number}}</td>
+                    </tr>
+                    <tr>
+                      <td>Alternative Number</td>
+                      <td>{{i.alternative_number}}</td>
+                    </tr>
+                    <tr>
+                      <td>Address</td>
+                      <td>{{i.address}}</td>
+                    </tr>
+                    <tr>
+                      <td>User Type</td>
+                      <td>{{i.email_id}}</td>
+                    </tr>
+                    <tr>
+                      <td>Created On</td>
+                      <td>{{i.user_type}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+
+<!--HOUSE TYPE EDIT MODULE -->
+<!-- Modal -->
+{% for i in users %}
+<div class="modal fade" id="editModal{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit House Type</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/house-type/edit/{{i.id}}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="editHouseType">House Type</label>
+                        <input type="text" name="edit_house_type_name" class="form-control rounded-0" id="editHouseType"
+                               value="{{i.type}}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary rounded-0">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+<!--closed add house modal -->
+<!--CLOSE HOUSE TYPE EDIT MODULE -->
+<!--closed info modals -->
+{% endblock %}
