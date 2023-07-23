@@ -12,6 +12,9 @@ urlpatterns = [
     path("houses_allocation/", views.house_allocation, name="house_allocation"),
     path("houses_allocation/delete/<int:pk>", views.delete_house_allocation, name="delete_house_allocation"),
 
+    # MANAGE PAYMENTS 
+    path("manage_payments/", views.manage_payments, name="manage_payments"),
+
 
     # MANAGE USERS
     path("user/", views.users, name="user"),
