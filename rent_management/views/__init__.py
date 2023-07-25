@@ -5,3 +5,4 @@ from .tenants import *
 from .user import *
 from .house_allocation import *
 from .manage_payments import *
+from .login import *
