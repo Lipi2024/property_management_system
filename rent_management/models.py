@@ -64,10 +64,9 @@ class Tenants(models.Model):
 
 class Payment(models.Model):
     receipt_no = models.CharField(max_length=20, default='')
-    tenants_details = models.ForeignKey(Tenants, on_delete=models.CASCADE)
+    house_details = models.ForeignKey(House, on_delete=models.CASCADE)
     paid_amount = models.IntegerField(default=0)
     paid_date = models.DateTimeField(auto_now_add=True)
-    outstanding = models.IntegerField(default=0)
 
     def __str__(self):
         return self.receipt_no

@@ -14,10 +14,12 @@ urlpatterns = [
 
     # MANAGE PAYMENTS 
     path("manage_payments/", views.manage_payments, name="manage_payments"),
+    path("manage_payments/delete/<int:pk>", views.delete_payments, name="delete_payments"),
 
 
     # MANAGE USERS
     path("user/", views.users, name="user"),
+    path("tenants/", views.tenants, name="tenants"),
 
     # manage tenants
     path("manage_tenants/", views.manage_tenants, name="menge_tenants"),

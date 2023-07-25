@@ -1,0 +1,62 @@
+{% extends "rent/base/base.html" %}
+{% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">Tenants</h1>
+
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">All Tenants List</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Sl No</th>
+                            <th>Name</th>
+                            <th>House Rented</th>
+                            <th>Contact</th>
+                            <th>Address</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Sl No</th>
+                            <th>Name</th>
+                            <th>House Rented</th>
+                            <th>Contact</th>
+                            <th>Address</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                    {% for i in tenants_list %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{i.name}}</td>
+                            <td>
+                                    {% for tenants in house_rent_list %}
+                                        {% if tenants.name.id == i.id %}
+                                            {{tenants.rented_house.number}}
+                                        {% endif %}
+                                    {% endfor %}
+                            </td>
+                            <td>{{i.mobile_number}}</td>
+                            <td>{{i.address}}</td>
+                        </tr>
+
+                    {% endfor %}
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+{% endblock %}
