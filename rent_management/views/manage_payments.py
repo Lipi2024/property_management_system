@@ -28,3 +28,12 @@ def delete_payments(request, pk):
     payment_remove = Payment.objects.filter(id=pk)
     payment_remove.delete()
     return redirect('/manage_payments')
+
+
+def payments_reports(request):
+    payment_list = Payment.objects.all().order_by('-id')
+
+    context = {
+        'payments_lists': payment_list,
+    }
+    return render(request, "rent/payments/payment_report.html", context)

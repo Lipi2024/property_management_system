@@ -44,7 +44,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="/">
+                <a class="nav-link" href="/dashboard">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -108,7 +108,7 @@
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="/manage_payments">Manage Payments</a>
-                        <a class="collapse-item" href="register.html">Payments Reports</a>
+                        <a class="collapse-item" href="/payments_report">Payments Reports</a>
                     </div>
                 </div>
             </li>
@@ -394,6 +394,15 @@
         </div>
     </div>
 
+        <script>
+            function printPageArea(areaID){
+                var printContent = document.getElementById(areaID).innerHTML;
+                var originalContent = document.body.innerHTML;
+                document.body.innerHTML = printContent;
+                window.print();
+                document.body.innerHTML = originalContent;
+            }
+        </script>
     <!-- Bootstrap core JavaScript-->
     <script src="{% static 'rent/vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'rent/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>

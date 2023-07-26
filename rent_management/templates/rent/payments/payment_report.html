@@ -13,15 +13,12 @@
                     <h6 class="m-0 font-weight-bold text-primary">All Payments</h6>
                 </div>
                 <div class="col-lg-4 text-right">
-                    <button type="button" class="btn btn-primary rounded-0" data-toggle="modal"
-                            data-target="#exampleModal">
-                        <i class="fa fa-plus" aria-hidden="true"></i> Add Receipt
-                    </button>
+
                 </div>
             </div>
 
         </div>
-        <div class="card-body" id="printableArea">
+        <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
@@ -31,8 +28,6 @@
                         <th>Receipt No</th>
                         <th>House Details</th>
                         <th>Paid Amount</th>
-                        <th>Amount</th>
-                        <th>Action</th>
                     </tr>
                     </thead>
                     <tfoot>
@@ -42,32 +37,22 @@
                         <th>Receipt No</th>
                         <th>House Details</th>
                         <th>Paid Amount</th>
-                        <th>Amount</th>
-                        <th>Action</th>
                     </tr>
                     </tfoot>
                     <tbody>
 
-                    {% if not payments %}
+                    {% if not payments_lists %}
                     <tr>
                         <td colspan="3" class="text-center">No Data Available!</td>
                     </tr>
                     {% else %}
-                    {% for i in payments %}
+                    {% for i in payments_lists %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td>{{ i.paid_date }}</td>
                         <td>{{i.receipt_no}}</td>
                         <td>{{i.house_details}}</td>
                         <td>{{i.paid_amount}}</td>
-                        <td>{{i.house_details.rent}}</td>
-                        <td>
-                            <button class="btn btn-sm btn-warning rounded-0" href="javascript:void(0);" onclick="printPageArea('printableArea')">Print
-                            </button>
-                            <a href="/manage_payments/delete/{{i.id}}" class="btn btn-sm btn-danger rounded-0" >
-                                Delete
-                            </a>
-                        </td>
                     </tr>
                     {% endfor %}
                     {% endif %}
@@ -185,7 +170,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit House Type</h5>
+                <h5 class="modal-title">Payment Reports</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

@@ -4,9 +4,10 @@ from rent_management.models import *
 
 
 def manage_tenants(request):
-    tenants_list = User.objects.filter(user_type=3)
+    tenants_list = Tenants.objects.all()
+
     context = {
-        'tenants_lists': tenants_list,
+        'tenants_lists_details': tenants_list,
     }
     return render(request, "rent/tenants/manage_tenants.html", context)
 

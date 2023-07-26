@@ -17,6 +17,7 @@ urlpatterns = [
     # MANAGE PAYMENTS 
     path("manage_payments/", views.manage_payments, name="manage_payments"),
     path("manage_payments/delete/<int:pk>", views.delete_payments, name="delete_payments"),
+    path("payments_report/", views.payments_reports, name="payments_reports"),
 
 
     # MANAGE USERS
